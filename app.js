@@ -36,7 +36,8 @@ function handleFormSubmit(e) {
         symptoms: Array.from(document.querySelectorAll('input[name="symptoms"]:checked')).map(cb => cb.value),
         mood: document.getElementById('mood').value,
         water: document.getElementById('water').value,
-        sleep: document.getElementById('sleep').value
+        sleep: document.getElementById('sleep').value,
+        journal: document.getElementById('journal').value.trim()
     };
     
     saveEntry(entry);
@@ -61,13 +62,18 @@ function loadEntries() {
 // Display entries in the history section
 function displayEntries(entries) {
     const entriesList = document.getElementById('entries-list');
+    const journalEntries = document.getElementById('journal-entries');
+    
     entriesList.innerHTML = '';
+    journalEntries.innerHTML = '';
     
     if (entries.length === 0) {
         entriesList.innerHTML = '<p class="no-entries">No entries yet. Start tracking your wellness journey!</p>';
+        journalEntries.innerHTML = '<p class="no-entries">No journal entries yet. Start writing your thoughts!</p>';
         return;
     }
     
+    // Display wellness entries
     entries.slice(-5).reverse().forEach(entry => {
         const entryElement = document.createElement('div');
         entryElement.className = 'entry-card';
@@ -80,6 +86,24 @@ function displayEntries(entries) {
         `;
         entriesList.appendChild(entryElement);
     });
+
+    // Display journal entries
+    entries
+        .filter(entry => entry.journal) // Only show entries with journal content
+        .slice(-5)
+        .reverse()
+        .forEach(entry => {
+            const journalElement = document.createElement('div');
+            journalElement.className = 'journal-entry';
+            journalElement.innerHTML = `
+                <div class="date">
+                    ${formatDate(entry.date)}
+                    <span class="mood-indicator">${'😊'.repeat(entry.mood)}</span>
+                </div>
+                <div class="content">${entry.journal}</div>
+            `;
+            journalEntries.appendChild(journalElement);
+        });
 }
 
 // Update the chart with entry data
@@ -166,4 +190,5 @@ function formatDate(dateString) {
 function resetForm() {
     document.getElementById('wellness-form').reset();
     document.getElementById('date').valueAsDate = new Date();
+    document.getElementById('journal').value = ''; // Clear journal textarea
 } 
