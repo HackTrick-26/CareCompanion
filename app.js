@@ -81,14 +81,11 @@ function loadEntries() {
 // Display entries in the history section
 function displayEntries(entries) {
     const entriesList = document.getElementById('entries-list');
-    const journalEntries = document.getElementById('journal-entries');
     
     entriesList.innerHTML = '';
-    journalEntries.innerHTML = '';
     
     if (entries.length === 0) {
         entriesList.innerHTML = '<p class="no-entries">No entries yet. Start tracking your wellness journey!</p>';
-        journalEntries.innerHTML = '<p class="no-entries">No journal entries yet. Start writing your thoughts!</p>';
         return;
     }
     
@@ -153,54 +150,6 @@ function displayEntries(entries) {
             `;
             
             entriesList.appendChild(entryElement);
-            
-            // Add click handler for the header
-            const header = entryElement.querySelector('.entry-day-header');
-            const content = entryElement.querySelector('.entry-day-content');
-            
-            header.addEventListener('click', () => {
-                header.classList.toggle('active');
-                content.classList.toggle('active');
-            });
-        });
-
-    // Display journal entries (only entries with journal content)
-    const journalEntriesByDate = entries
-        .filter(entry => entry.journal)
-        .reduce((acc, entry) => {
-            const date = entry.date;
-            if (!acc[date]) {
-                acc[date] = [];
-            }
-            acc[date].push(entry);
-            return acc;
-        }, {});
-
-    Object.entries(journalEntriesByDate)
-        .sort(([dateA], [dateB]) => new Date(dateB) - new Date(dateA))
-        .forEach(([date, dayEntries]) => {
-            const entryElement = document.createElement('div');
-            entryElement.className = 'entry-day';
-            
-            const latestEntry = dayEntries[0];
-            const moodEmoji = getMoodEmoji(latestEntry.mood);
-            
-            entryElement.innerHTML = `
-                <div class="entry-day-header">
-                    <span class="date">${formatDate(date)}</span>
-                    <span class="mood">${moodEmoji}</span>
-                    <span class="toggle-icon">▼</span>
-                </div>
-                <div class="entry-day-content">
-                    ${dayEntries.map(entry => `
-                        <div class="journal-content">
-                            ${entry.journal}
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            
-            journalEntries.appendChild(entryElement);
             
             // Add click handler for the header
             const header = entryElement.querySelector('.entry-day-header');
