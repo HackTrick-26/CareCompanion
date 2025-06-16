@@ -25,6 +25,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add form submit handler
     document.getElementById('wellness-form').addEventListener('submit', handleFormSubmit);
+
+    // Add tab switching functionality
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding content
+            button.classList.add('active');
+            const tabId = button.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
 });
 
 // Handle form submission

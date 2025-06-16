@@ -14,133 +14,143 @@
             <p class="subtitle">Track your wellness journey</p>
         </header>
 
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="daily-log">Daily Log</button>
+            <button class="tab-btn" data-tab="progress">Progress</button>
+            <button class="tab-btn" data-tab="entries">Entries</button>
+        </div>
+
         <main>
-            <section id="daily-log" class="card">
-                <h2>Daily Log</h2>
-                <form id="wellness-form">
-                    <div class="form-group">
-                        <label for="date">Date:</label>
-                        <input type="date" id="date" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>How are you feeling today?</label>
-                        <div class="symptoms-grid">
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="energetic">
-                                <span class="symptom-icon">⚡</span>
-                                Energetic
-                            </label>
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="tired">
-                                <span class="symptom-icon">😴</span>
-                                Tired
-                            </label>
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="headache">
-                                <span class="symptom-icon">🤕</span>
-                                Headache
-                            </label>
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="anxious">
-                                <span class="symptom-icon">😰</span>
-                                Anxious
-                            </label>
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="happy">
-                                <span class="symptom-icon">😊</span>
-                                Happy
-                            </label>
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="sad">
-                                <span class="symptom-icon">😢</span>
-                                Sad
-                            </label>
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="stressed">
-                                <span class="symptom-icon">😤</span>
-                                Stressed
-                            </label>
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="calm">
-                                <span class="symptom-icon">😌</span>
-                                Calm
-                            </label>
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="productive">
-                                <span class="symptom-icon">💪</span>
-                                Productive
-                            </label>
-                            <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="sick">
-                                <span class="symptom-icon">🤒</span>
-                                Sick
-                            </label>
+            <section id="daily-log" class="tab-content active">
+                <div class="card">
+                    <h2>Daily Log</h2>
+                    <form id="wellness-form">
+                        <div class="form-group">
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" required>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Overall Mood</label>
-                        <div class="mood-selector">
-                            <input type="radio" name="mood" id="mood-1" value="1" class="mood-radio">
-                            <label for="mood-1" class="mood-label">😢</label>
-                            
-                            <input type="radio" name="mood" id="mood-2" value="2" class="mood-radio">
-                            <label for="mood-2" class="mood-label">😕</label>
-                            
-                            <input type="radio" name="mood" id="mood-3" value="3" class="mood-radio">
-                            <label for="mood-3" class="mood-label">😐</label>
-                            
-                            <input type="radio" name="mood" id="mood-4" value="4" class="mood-radio">
-                            <label for="mood-4" class="mood-label">🙂</label>
-                            
-                            <input type="radio" name="mood" id="mood-5" value="5" class="mood-radio" checked>
-                            <label for="mood-5" class="mood-label">😊</label>
+                        <div class="form-group">
+                            <label>How are you feeling today?</label>
+                            <div class="symptoms-grid">
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="energetic">
+                                    <span class="symptom-icon">⚡</span>
+                                    Energetic
+                                </label>
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="tired">
+                                    <span class="symptom-icon">😴</span>
+                                    Tired
+                                </label>
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="headache">
+                                    <span class="symptom-icon">🤕</span>
+                                    Headache
+                                </label>
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="anxious">
+                                    <span class="symptom-icon">😰</span>
+                                    Anxious
+                                </label>
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="happy">
+                                    <span class="symptom-icon">😊</span>
+                                    Happy
+                                </label>
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="sad">
+                                    <span class="symptom-icon">😢</span>
+                                    Sad
+                                </label>
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="stressed">
+                                    <span class="symptom-icon">😤</span>
+                                    Stressed
+                                </label>
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="calm">
+                                    <span class="symptom-icon">😌</span>
+                                    Calm
+                                </label>
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="productive">
+                                    <span class="symptom-icon">💪</span>
+                                    Productive
+                                </label>
+                                <label class="symptom-item">
+                                    <input type="checkbox" name="symptoms" value="sick">
+                                    <span class="symptom-icon">🤒</span>
+                                    Sick
+                                </label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="water">Water Intake (cups):</label>
-                        <input type="number" id="water" min="0" max="20" value="0">
-                    </div>
+                        <div class="form-group">
+                            <label>Overall Mood</label>
+                            <div class="mood-selector">
+                                <input type="radio" name="mood" id="mood-1" value="1" class="mood-radio">
+                                <label for="mood-1" class="mood-label">😢</label>
+                                
+                                <input type="radio" name="mood" id="mood-2" value="2" class="mood-radio">
+                                <label for="mood-2" class="mood-label">😕</label>
+                                
+                                <input type="radio" name="mood" id="mood-3" value="3" class="mood-radio">
+                                <label for="mood-3" class="mood-label">😐</label>
+                                
+                                <input type="radio" name="mood" id="mood-4" value="4" class="mood-radio">
+                                <label for="mood-4" class="mood-label">🙂</label>
+                                
+                                <input type="radio" name="mood" id="mood-5" value="5" class="mood-radio" checked>
+                                <label for="mood-5" class="mood-label">😊</label>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="sleep">Sleep (hours):</label>
-                        <input type="number" id="sleep" min="0" max="24" step="0.5" value="8">
-                    </div>
+                        <div class="form-group">
+                            <label for="water">Water Intake (cups):</label>
+                            <input type="number" id="water" min="0" max="20" value="0">
+                        </div>
 
-                    <div class="form-group">
-                        <label for="journal">Today's Journal Entry:</label>
-                        <textarea id="journal" rows="4" placeholder="How are you feeling today? What's on your mind?"></textarea>
-                    </div>
+                        <div class="form-group">
+                            <label for="sleep">Sleep (hours):</label>
+                            <input type="number" id="sleep" min="0" max="24" step="0.5" value="8">
+                        </div>
 
-                    <button type="submit" class="btn-primary">Save Entry</button>
-                </form>
-            </section>
+                        <div class="form-group">
+                            <label for="journal">Today's Journal Entry:</label>
+                            <textarea id="journal" rows="4" placeholder="How are you feeling today? What's on your mind?"></textarea>
+                        </div>
 
-            <section id="wellness-tip" class="card">
-                <h2>Today's Wellness Tip</h2>
-                <p id="tip-content">Loading tip...</p>
-            </section>
-
-            <section id="progress" class="card">
-                <h2>Your Progress</h2>
-                <div class="chart-container">
-                    <canvas id="progress-chart"></canvas>
+                        <button type="submit" class="btn-primary">Save Entry</button>
+                    </form>
                 </div>
             </section>
 
-            <section id="history" class="card">
-                <h2>Recent Entries</h2>
-                <div id="entries-list">
-                    <!-- Entries will be populated by JavaScript -->
+            <section id="progress" class="tab-content">
+                <div class="card">
+                    <h2>Your Progress</h2>
+                    <div class="chart-container">
+                        <canvas id="progress-chart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Today's Wellness Tip</h2>
+                    <p id="tip-content">Loading tip...</p>
                 </div>
             </section>
 
-            <section id="journal-history" class="card">
-                <h2>Journal Entries</h2>
-                <div id="journal-entries">
-                    <!-- Journal entries will be populated by JavaScript -->
+            <section id="entries" class="tab-content">
+                <div class="card">
+                    <h2>Recent Entries</h2>
+                    <div id="entries-list">
+                        <!-- Entries will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Journal Entries</h2>
+                    <div id="journal-entries">
+                        <!-- Journal entries will be populated by JavaScript -->
+                    </div>
                 </div>
             </section>
         </main>
