@@ -15,7 +15,11 @@ const wellnessTips = [
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     // Set today's date as default
-    document.getElementById('date').valueAsDate = new Date();
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    document.getElementById('date').value = `${year}-${month}-${day}`;
     
     // Load saved entries
     loadEntries();
@@ -204,14 +208,19 @@ function displayWellnessTip() {
 
 // Format date for display
 function formatDate(dateString) {
+    const date = new Date(dateString + 'T00:00:00'); // Ensure consistent timezone handling
     const options = { month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return date.toLocaleDateString(undefined, options);
 }
 
 // Reset form after submission
 function resetForm() {
     document.getElementById('wellness-form').reset();
-    document.getElementById('date').valueAsDate = new Date();
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    document.getElementById('date').value = `${year}-${month}-${day}`;
     document.getElementById('journal').value = ''; // Clear journal textarea
 }
 
