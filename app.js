@@ -12,6 +12,39 @@ const wellnessTips = [
     "Practice deep breathing exercises when feeling stressed."
 ];
 
+const achievements = [
+    {
+        id: 'first_entry',
+        title: 'First Step',
+        description: 'Logged your first wellness entry',
+        icon: 'fa-bullseye'
+    },
+    {
+        id: 'streak_3',
+        title: 'Getting Started',
+        description: 'Logged entries for 3 consecutive days',
+        icon: 'fa-fire'
+    },
+    {
+        id: 'water_goal',
+        title: 'Hydration Hero',
+        description: 'Met your water intake goal for 5 days',
+        icon: 'fa-glass-water'
+    },
+    {
+        id: 'sleep_goal',
+        title: 'Sleep Champion',
+        description: 'Got 8+ hours of sleep for 3 days',
+        icon: 'fa-moon'
+    },
+    {
+        id: 'mood_high',
+        title: 'Sunshine Spirit',
+        description: 'Logged 5 days with high mood ratings',
+        icon: 'fa-sun'
+    }
+];
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     // Set today's date as default
@@ -281,4 +314,38 @@ function getSymptomEmoji(symptom) {
         'sick': '🤒'
     };
     return symptomEmojis[symptom] || '•';
+}
+
+function displayAchievements() {
+    const achievementsList = document.getElementById('achievements-list');
+    const userAchievements = JSON.parse(localStorage.getItem('userAchievements') || '[]');
+    
+    achievementsList.innerHTML = achievements.map(achievement => `
+        <div class="achievement-card ${userAchievements.includes(achievement.id) ? 'unlocked' : 'locked'}">
+            <div class="achievement-icon"><i class="fas ${achievement.icon}"></i></div>
+            <h3>${achievement.title}</h3>
+            <p>${achievement.description}</p>
+            ${userAchievements.includes(achievement.id) 
+                ? '<span class="achievement-status"><i class="fas fa-trophy"></i> Unlocked!</span>'
+                : '<span class="achievement-status locked"><i class="fas fa-lock"></i> Locked</span>'}
+        </div>
+    `).join('');
+}
+
+function showAchievementNotification(newAchievements) {
+    newAchievements.forEach(achievementId => {
+        const achievement = achievements.find(a => a.id === achievementId);
+        const notification = document.createElement('div');
+        notification.className = 'achievement-notification';
+        notification.innerHTML = `
+            <div class="achievement-icon"><i class="fas ${achievement.icon}"></i></div>
+            <div class="achievement-content">
+                <h3>Achievement Unlocked!</h3>
+                <p>${achievement.title}</p>
+                <small>${achievement.description}</small>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 5000);
+    });
 } 
