@@ -27,31 +27,75 @@
                         <label>How are you feeling today?</label>
                         <div class="symptoms-grid">
                             <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="energetic">
+                                <span class="symptom-icon">⚡</span>
+                                Energetic
+                            </label>
+                            <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="tired">
+                                <span class="symptom-icon">😴</span>
+                                Tired
+                            </label>
+                            <label class="symptom-item">
                                 <input type="checkbox" name="symptoms" value="headache">
+                                <span class="symptom-icon">🤕</span>
                                 Headache
                             </label>
                             <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="fatigue">
-                                Fatigue
+                                <input type="checkbox" name="symptoms" value="anxious">
+                                <span class="symptom-icon">😰</span>
+                                Anxious
                             </label>
                             <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="anxiety">
-                                Anxiety
+                                <input type="checkbox" name="symptoms" value="happy">
+                                <span class="symptom-icon">😊</span>
+                                Happy
                             </label>
                             <label class="symptom-item">
-                                <input type="checkbox" name="symptoms" value="good">
-                                Feeling Good
+                                <input type="checkbox" name="symptoms" value="sad">
+                                <span class="symptom-icon">😢</span>
+                                Sad
+                            </label>
+                            <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="stressed">
+                                <span class="symptom-icon">😤</span>
+                                Stressed
+                            </label>
+                            <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="calm">
+                                <span class="symptom-icon">😌</span>
+                                Calm
+                            </label>
+                            <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="productive">
+                                <span class="symptom-icon">💪</span>
+                                Productive
+                            </label>
+                            <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="sick">
+                                <span class="symptom-icon">🤒</span>
+                                Sick
                             </label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="mood">Mood (1-5):</label>
-                        <input type="range" id="mood" min="1" max="5" value="3">
-                        <div class="mood-labels">
-                            <span>😢</span>
-                            <span>😐</span>
-                            <span>😊</span>
+                        <label>Overall Mood</label>
+                        <div class="mood-selector">
+                            <input type="radio" name="mood" id="mood-1" value="1" class="mood-radio">
+                            <label for="mood-1" class="mood-label">😢</label>
+                            
+                            <input type="radio" name="mood" id="mood-2" value="2" class="mood-radio">
+                            <label for="mood-2" class="mood-label">😕</label>
+                            
+                            <input type="radio" name="mood" id="mood-3" value="3" class="mood-radio">
+                            <label for="mood-3" class="mood-label">😐</label>
+                            
+                            <input type="radio" name="mood" id="mood-4" value="4" class="mood-radio">
+                            <label for="mood-4" class="mood-label">🙂</label>
+                            
+                            <input type="radio" name="mood" id="mood-5" value="5" class="mood-radio" checked>
+                            <label for="mood-5" class="mood-label">😊</label>
                         </div>
                     </div>
 

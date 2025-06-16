@@ -34,7 +34,7 @@ function handleFormSubmit(e) {
     const entry = {
         date: document.getElementById('date').value,
         symptoms: Array.from(document.querySelectorAll('input[name="symptoms"]:checked')).map(cb => cb.value),
-        mood: document.getElementById('mood').value,
+        mood: document.querySelector('input[name="mood"]:checked').value,
         water: document.getElementById('water').value,
         sleep: document.getElementById('sleep').value,
         journal: document.getElementById('journal').value.trim()
@@ -77,10 +77,17 @@ function displayEntries(entries) {
     entries.slice(-5).reverse().forEach(entry => {
         const entryElement = document.createElement('div');
         entryElement.className = 'entry-card';
+        
+        const moodEmoji = getMoodEmoji(entry.mood);
+        const symptomsList = entry.symptoms.map(symptom => {
+            const emoji = getSymptomEmoji(symptom);
+            return `${emoji} ${symptom}`;
+        }).join(', ') || 'None';
+        
         entryElement.innerHTML = `
             <strong>${formatDate(entry.date)}</strong>
-            <p>Mood: ${'😊'.repeat(entry.mood)}</p>
-            <p>Symptoms: ${entry.symptoms.join(', ') || 'None'}</p>
+            <p>Mood: ${moodEmoji}</p>
+            <p>Symptoms: ${symptomsList}</p>
             <p>Water: ${entry.water} cups</p>
             <p>Sleep: ${entry.sleep} hours</p>
         `;
@@ -98,7 +105,7 @@ function displayEntries(entries) {
             journalElement.innerHTML = `
                 <div class="date">
                     ${formatDate(entry.date)}
-                    <span class="mood-indicator">${'😊'.repeat(entry.mood)}</span>
+                    <span class="mood-indicator">${getMoodEmoji(entry.mood)}</span>
                 </div>
                 <div class="content">${entry.journal}</div>
             `;
@@ -191,4 +198,33 @@ function resetForm() {
     document.getElementById('wellness-form').reset();
     document.getElementById('date').valueAsDate = new Date();
     document.getElementById('journal').value = ''; // Clear journal textarea
+}
+
+// Get emoji for mood
+function getMoodEmoji(mood) {
+    const moodEmojis = {
+        '1': '😢',
+        '2': '😕',
+        '3': '😐',
+        '4': '🙂',
+        '5': '😊'
+    };
+    return moodEmojis[mood] || '😐';
+}
+
+// Get emoji for symptom
+function getSymptomEmoji(symptom) {
+    const symptomEmojis = {
+        'energetic': '⚡',
+        'tired': '😴',
+        'headache': '🤕',
+        'anxious': '😰',
+        'happy': '😊',
+        'sad': '😢',
+        'stressed': '😤',
+        'calm': '😌',
+        'productive': '💪',
+        'sick': '🤒'
+    };
+    return symptomEmojis[symptom] || '•';
 } 
