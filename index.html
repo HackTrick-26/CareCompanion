@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareCompanion - Your Daily Wellness Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CareCompanion</h1>
+            <p class="subtitle">Track your wellness journey</p>
+        </header>
+
+        <main>
+            <section id="daily-log" class="card">
+                <h2>Daily Log</h2>
+                <form id="wellness-form">
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>How are you feeling today?</label>
+                        <div class="symptoms-grid">
+                            <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="headache">
+                                Headache
+                            </label>
+                            <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="fatigue">
+                                Fatigue
+                            </label>
+                            <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="anxiety">
+                                Anxiety
+                            </label>
+                            <label class="symptom-item">
+                                <input type="checkbox" name="symptoms" value="good">
+                                Feeling Good
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mood">Mood (1-5):</label>
+                        <input type="range" id="mood" min="1" max="5" value="3">
+                        <div class="mood-labels">
+                            <span>😢</span>
+                            <span>😐</span>
+                            <span>😊</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="water">Water Intake (cups):</label>
+                        <input type="number" id="water" min="0" max="20" value="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sleep">Sleep (hours):</label>
+                        <input type="number" id="sleep" min="0" max="24" step="0.5" value="8">
+                    </div>
+
+                    <button type="submit" class="btn-primary">Save Entry</button>
+                </form>
+            </section>
+
+            <section id="wellness-tip" class="card">
+                <h2>Today's Wellness Tip</h2>
+                <p id="tip-content">Loading tip...</p>
+            </section>
+
+            <section id="progress" class="card">
+                <h2>Your Progress</h2>
+                <div class="chart-container">
+                    <canvas id="progress-chart"></canvas>
+                </div>
+            </section>
+
+            <section id="history" class="card">
+                <h2>Recent Entries</h2>
+                <div id="entries-list">
+                    <!-- Entries will be populated by JavaScript -->
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html> 
