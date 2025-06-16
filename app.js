@@ -92,43 +92,124 @@ function displayEntries(entries) {
         return;
     }
     
-    // Display wellness entries
-    entries.slice(-5).reverse().forEach(entry => {
-        const entryElement = document.createElement('div');
-        entryElement.className = 'entry-card';
-        
-        const moodEmoji = getMoodEmoji(entry.mood);
-        const symptomsList = entry.symptoms.map(symptom => {
-            const emoji = getSymptomEmoji(symptom);
-            return `${emoji} ${symptom}`;
-        }).join(', ') || 'None';
-        
-        entryElement.innerHTML = `
-            <strong>${formatDate(entry.date)}</strong>
-            <p>Mood: ${moodEmoji}</p>
-            <p>Symptoms: ${symptomsList}</p>
-            <p>Water: ${entry.water} cups</p>
-            <p>Sleep: ${entry.sleep} hours</p>
-        `;
-        entriesList.appendChild(entryElement);
-    });
+    // Group entries by date
+    const entriesByDate = entries.reduce((acc, entry) => {
+        const date = entry.date;
+        if (!acc[date]) {
+            acc[date] = [];
+        }
+        acc[date].push(entry);
+        return acc;
+    }, {});
 
-    // Display journal entries
-    entries
-        .filter(entry => entry.journal) // Only show entries with journal content
-        .slice(-5)
-        .reverse()
-        .forEach(entry => {
-            const journalElement = document.createElement('div');
-            journalElement.className = 'journal-entry';
-            journalElement.innerHTML = `
-                <div class="date">
-                    ${formatDate(entry.date)}
-                    <span class="mood-indicator">${getMoodEmoji(entry.mood)}</span>
+    // Display wellness entries
+    Object.entries(entriesByDate)
+        .sort(([dateA], [dateB]) => new Date(dateB) - new Date(dateA))
+        .forEach(([date, dayEntries]) => {
+            const entryElement = document.createElement('div');
+            entryElement.className = 'entry-day';
+            
+            const latestEntry = dayEntries[0];
+            const moodEmoji = getMoodEmoji(latestEntry.mood);
+            
+            entryElement.innerHTML = `
+                <div class="entry-day-header">
+                    <span class="date">${formatDate(date)}</span>
+                    <span class="mood">${moodEmoji}</span>
+                    <span class="toggle-icon">▼</span>
                 </div>
-                <div class="content">${entry.journal}</div>
+                <div class="entry-day-content">
+                    ${dayEntries.map(entry => `
+                        <div class="entry-details">
+                            <div class="symptoms">
+                                ${entry.symptoms.map(symptom => `
+                                    <span class="symptom-tag">
+                                        ${getSymptomEmoji(symptom)} ${symptom}
+                                    </span>
+                                `).join('')}
+                            </div>
+                            <div class="stats">
+                                <div class="stat-item">
+                                    <div class="stat-label">Mood</div>
+                                    <div class="stat-value">${getMoodEmoji(entry.mood)}</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Water</div>
+                                    <div class="stat-value">${entry.water} cups</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Sleep</div>
+                                    <div class="stat-value">${entry.sleep} hours</div>
+                                </div>
+                            </div>
+                            ${entry.journal ? `
+                                <div class="journal-content">
+                                    ${entry.journal}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `).join('')}
+                </div>
             `;
-            journalEntries.appendChild(journalElement);
+            
+            entriesList.appendChild(entryElement);
+            
+            // Add click handler for the header
+            const header = entryElement.querySelector('.entry-day-header');
+            const content = entryElement.querySelector('.entry-day-content');
+            
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                content.classList.toggle('active');
+            });
+        });
+
+    // Display journal entries (only entries with journal content)
+    const journalEntriesByDate = entries
+        .filter(entry => entry.journal)
+        .reduce((acc, entry) => {
+            const date = entry.date;
+            if (!acc[date]) {
+                acc[date] = [];
+            }
+            acc[date].push(entry);
+            return acc;
+        }, {});
+
+    Object.entries(journalEntriesByDate)
+        .sort(([dateA], [dateB]) => new Date(dateB) - new Date(dateA))
+        .forEach(([date, dayEntries]) => {
+            const entryElement = document.createElement('div');
+            entryElement.className = 'entry-day';
+            
+            const latestEntry = dayEntries[0];
+            const moodEmoji = getMoodEmoji(latestEntry.mood);
+            
+            entryElement.innerHTML = `
+                <div class="entry-day-header">
+                    <span class="date">${formatDate(date)}</span>
+                    <span class="mood">${moodEmoji}</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="entry-day-content">
+                    ${dayEntries.map(entry => `
+                        <div class="journal-content">
+                            ${entry.journal}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            journalEntries.appendChild(entryElement);
+            
+            // Add click handler for the header
+            const header = entryElement.querySelector('.entry-day-header');
+            const content = entryElement.querySelector('.entry-day-content');
+            
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                content.classList.toggle('active');
+            });
         });
 }
 
