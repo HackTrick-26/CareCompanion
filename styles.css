@@ -561,11 +561,31 @@ textarea:focus {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
+    position: relative;
+}
+
+.logo-section {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.logo-section h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.logo-section .subtitle {
+    margin: 0.5rem 0 0;
+    color: var(--text-color);
+    opacity: 0.8;
 }
 
 .accessibility-controls {
     display: flex;
     gap: 1rem;
+    margin-left: auto;
 }
 
 .icon-button {
