@@ -192,14 +192,19 @@ function displayEntries(entries) {
                     <span class="toggle-icon">▼</span>
                 </div>
                 <div class="entry-day-content">
-                    ${dayEntries.map(entry => `
+                    ${dayEntries.map((entry, index) => `
                         <div class="entry-details">
-                            <div class="symptoms">
-                                ${entry.symptoms.map(symptom => `
-                                    <span class="symptom-tag">
-                                        ${getSymptomEmoji(symptom)} ${symptom}
-                                    </span>
-                                `).join('')}
+                            <div class="entry-header">
+                                <div class="symptoms">
+                                    ${entry.symptoms.map(symptom => `
+                                        <span class="symptom-tag">
+                                            ${getSymptomEmoji(symptom)} ${symptom}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                                <button class="remove-entry" data-date="${date}" data-index="${index}" aria-label="Remove entry">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
                             </div>
                             <div class="stats">
                                 <div class="stat-item">
@@ -234,6 +239,16 @@ function displayEntries(entries) {
             header.addEventListener('click', () => {
                 header.classList.toggle('active');
                 content.classList.toggle('active');
+            });
+
+            // Add click handlers for remove buttons
+            entryElement.querySelectorAll('.remove-entry').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent header toggle
+                    const date = button.dataset.date;
+                    const index = parseInt(button.dataset.index);
+                    removeEntry(date, index);
+                });
             });
         });
 }
@@ -499,4 +514,18 @@ function formatTimestamp(timestamp) {
     
     // Otherwise show date
     return date.toLocaleDateString();
+}
+
+// Add function to remove an entry
+function removeEntry(date, index) {
+    if (confirm('Are you sure you want to remove this entry?')) {
+        const entries = JSON.parse(localStorage.getItem('wellnessEntries') || '[]');
+        const entryToRemove = entries.findIndex(entry => entry.date === date);
+        
+        if (entryToRemove !== -1) {
+            entries.splice(entryToRemove, 1);
+            localStorage.setItem('wellnessEntries', JSON.stringify(entries));
+            loadEntries(); // Reload the entries display
+        }
+    }
 } 
