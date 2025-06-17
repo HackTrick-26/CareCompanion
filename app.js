@@ -45,6 +45,40 @@ const achievements = [
     }
 ];
 
+// Wellness glossary
+const wellnessGlossary = [
+    {
+        term: "Mindfulness",
+        definition: "The practice of being fully present and engaged in the current moment, without judgment."
+    },
+    {
+        term: "Sleep Hygiene",
+        definition: "Practices and habits that help you get a good night's sleep."
+    },
+    {
+        term: "Stress Management",
+        definition: "Techniques and strategies used to control and reduce stress levels."
+    },
+    {
+        term: "Self-Care",
+        definition: "Activities and practices that help maintain physical, mental, and emotional health."
+    }
+];
+
+// Community posts (simulated data)
+const communityPosts = [
+    {
+        id: 1,
+        content: "Started my wellness journey today! Feeling optimistic about the changes ahead.",
+        timestamp: "2024-01-15T10:30:00"
+    },
+    {
+        id: 2,
+        content: "Reached my water intake goal for the third day in a row! Small victories matter.",
+        timestamp: "2024-01-14T15:45:00"
+    }
+];
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     // Set today's date as default
@@ -77,6 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById(tabId).classList.add('active');
         });
     });
+
+    // Initialize accessibility features
+    initializeAccessibility();
+    
+    // Initialize community features
+    initializeCommunity();
+    
+    // Initialize educational content
+    initializeEducationalContent();
 });
 
 // Handle form submission
@@ -348,4 +391,112 @@ function showAchievementNotification(newAchievements) {
         document.body.appendChild(notification);
         setTimeout(() => notification.remove(), 5000);
     });
+}
+
+// Accessibility Features
+function initializeAccessibility() {
+    const highContrastToggle = document.getElementById('high-contrast-toggle');
+    const fontSizeIncrease = document.getElementById('font-size-increase');
+    
+    // High contrast mode
+    highContrastToggle.addEventListener('click', () => {
+        document.body.dataset.theme = document.body.dataset.theme === 'high-contrast' ? '' : 'high-contrast';
+        localStorage.setItem('theme', document.body.dataset.theme);
+    });
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.body.dataset.theme = savedTheme;
+    }
+    
+    // Font size increase
+    let currentFontSize = 1;
+    fontSizeIncrease.addEventListener('click', () => {
+        currentFontSize = currentFontSize === 1 ? 1.2 : 1;
+        document.body.style.fontSize = `${currentFontSize}rem`;
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            document.body.classList.add('keyboard-navigation');
+        }
+    });
+    
+    document.addEventListener('mousedown', () => {
+        document.body.classList.remove('keyboard-navigation');
+    });
+}
+
+// Community Features
+function initializeCommunity() {
+    const communityPostsContainer = document.getElementById('community-posts');
+    
+    // Display community posts
+    function displayCommunityPosts() {
+        communityPostsContainer.innerHTML = communityPosts
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .map(post => `
+                <div class="post-card">
+                    <div class="post-header">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="post-time">${formatTimestamp(post.timestamp)}</span>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                </div>
+            `).join('');
+    }
+    
+    displayCommunityPosts();
+    
+    // Add event listeners for community features
+    document.querySelectorAll('.btn-secondary').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const action = e.target.textContent.trim();
+            if (action === 'Find a Buddy') {
+                // Implement buddy matching logic
+                alert('Buddy matching feature coming soon!');
+            } else if (action === 'Share Your Story') {
+                // Implement story sharing logic
+                alert('Story sharing feature coming soon!');
+            }
+        });
+    });
+}
+
+// Educational Content
+function initializeEducationalContent() {
+    const glossaryContainer = document.getElementById('glossary-container');
+    
+    // Display glossary
+    glossaryContainer.innerHTML = wellnessGlossary
+        .map(item => `
+            <div class="glossary-item">
+                <h3>${item.term}</h3>
+                <p>${item.definition}</p>
+            </div>
+        `).join('');
+}
+
+// Utility Functions
+function formatTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now - date;
+    
+    // Less than 24 hours
+    if (diff < 24 * 60 * 60 * 1000) {
+        const hours = Math.floor(diff / (60 * 60 * 1000));
+        return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+    }
+    
+    // Less than 7 days
+    if (diff < 7 * 24 * 60 * 60 * 1000) {
+        const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+        return `${days} day${days !== 1 ? 's' : ''} ago`;
+    }
+    
+    // Otherwise show date
+    return date.toLocaleDateString();
 } 
