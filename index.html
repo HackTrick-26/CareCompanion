@@ -202,6 +202,24 @@
                             <!-- Goals will be populated by JavaScript -->
                         </div>
                     </div>
+
+                    <div class="card progress-card">
+                        <h2>Personalized Insights</h2>
+                        <div class="insights-container" id="insights-container">
+                            <!-- Insights will be populated by JavaScript -->
+                        </div>
+                        <button class="btn-primary" id="refresh-insights">
+                            <i class="fas fa-sync-alt"></i> Refresh Insights
+                        </button>
+                    </div>
+
+                    <div class="card progress-card">
+                        <h2>Mindful Moment</h2>
+                        <p>Take a moment to breathe and center yourself.</p>
+                        <button class="btn-primary" id="start-mindful-moment">
+                            <i class="fas fa-spa"></i> Start Session
+                        </button>
+                    </div>
                 </div>
 
                 <div class="card">
@@ -209,6 +227,36 @@
                     <p id="tip-content">Loading tip...</p>
                 </div>
             </section>
+
+            <!-- Mindful Moment Modal -->
+            <div id="mindful-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Mindful Moment</h2>
+                        <button class="close-modal" id="close-mindful-modal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="breathing-animation" id="breathing-animation">
+                            <div class="breathing-circle"></div>
+                        </div>
+                        <div class="session-info">
+                            <h3 id="session-title">Deep Breathing</h3>
+                            <p id="session-description">Follow the circle as it expands and contracts.</p>
+                            <div class="timer" id="session-timer">2:00</div>
+                        </div>
+                        <div class="session-controls">
+                            <button class="btn-secondary" id="pause-session">
+                                <i class="fas fa-pause"></i> Pause
+                            </button>
+                            <button class="btn-primary" id="complete-session">
+                                <i class="fas fa-check"></i> Complete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <section id="entries" class="tab-content">
                 <h2>Your Wellness Journey</h2>

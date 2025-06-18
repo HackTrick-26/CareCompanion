@@ -104,6 +104,206 @@ const defaultGoals = [
     }
 ];
 
+// Personalized insights based on user data
+function generateInsights(entries) {
+    if (entries.length < 3) {
+        return [{
+            title: "Getting Started",
+            message: "Keep logging your entries to receive personalized insights about your wellness patterns."
+        }];
+    }
+
+    const insights = [];
+    
+    // Analyze sleep patterns
+    const weekdaySleep = entries.filter(entry => {
+        const day = new Date(entry.date).getDay();
+        return day >= 1 && day <= 5; // Monday to Friday
+    });
+    const weekendSleep = entries.filter(entry => {
+        const day = new Date(entry.date).getDay();
+        return day === 0 || day === 6; // Saturday and Sunday
+    });
+
+    if (weekdaySleep.length > 0 && weekendSleep.length > 0) {
+        const avgWeekdaySleep = weekdaySleep.reduce((sum, entry) => sum + Number(entry.sleep), 0) / weekdaySleep.length;
+        const avgWeekendSleep = weekendSleep.reduce((sum, entry) => sum + Number(entry.sleep), 0) / weekendSleep.length;
+        
+        if (avgWeekdaySleep < avgWeekendSleep - 1) {
+            insights.push({
+                title: "Sleep Pattern Detected",
+                message: `You sleep ${(avgWeekendSleep - avgWeekdaySleep).toFixed(1)} hours less on weekdays. Try winding down earlier during the week.`
+            });
+        }
+    }
+
+    // Analyze mood and water correlation
+    const highMoodEntries = entries.filter(entry => Number(entry.mood) >= 4);
+    const lowMoodEntries = entries.filter(entry => Number(entry.mood) <= 2);
+    
+    if (highMoodEntries.length > 0 && lowMoodEntries.length > 0) {
+        const avgWaterHighMood = highMoodEntries.reduce((sum, entry) => sum + Number(entry.water), 0) / highMoodEntries.length;
+        const avgWaterLowMood = lowMoodEntries.reduce((sum, entry) => sum + Number(entry.water), 0) / lowMoodEntries.length;
+        
+        if (avgWaterHighMood > avgWaterLowMood + 1) {
+            insights.push({
+                title: "Hydration Impact",
+                message: `Your mood tends to be better when you drink more water. On high-mood days, you average ${avgWaterHighMood.toFixed(1)} cups vs ${avgWaterLowMood.toFixed(1)} cups on low-mood days.`
+            });
+        }
+    }
+
+    // Analyze symptom patterns
+    const symptomCounts = {};
+    entries.forEach(entry => {
+        entry.symptoms.forEach(symptom => {
+            symptomCounts[symptom] = (symptomCounts[symptom] || 0) + 1;
+        });
+    });
+
+    const mostCommonSymptom = Object.entries(symptomCounts).sort((a, b) => b[1] - a[1])[0];
+    if (mostCommonSymptom && mostCommonSymptom[1] >= 3) {
+        insights.push({
+            title: "Frequent Symptom",
+            message: `You've logged "${mostCommonSymptom[0]}" ${mostCommonSymptom[1]} times. Consider discussing this with a healthcare provider.`
+        });
+    }
+
+    // Analyze streaks
+    const recentEntries = entries.slice(-7);
+    const goodMoodStreak = recentEntries.filter(entry => Number(entry.mood) >= 4).length;
+    if (goodMoodStreak >= 5) {
+        insights.push({
+            title: "Great Streak!",
+            message: `You've had ${goodMoodStreak} positive mood days in the last week. Keep up the great work!`
+        });
+    }
+
+    // Add personalized wellness tips based on recent symptoms
+    const recentSymptoms = entries.slice(-3).flatMap(entry => entry.symptoms);
+    if (recentSymptoms.includes('stressed') || recentSymptoms.includes('anxious')) {
+        insights.push({
+            title: "Stress Management",
+            message: "You've been feeling stressed lately. Try the Mindful Moment breathing exercise to help you relax."
+        });
+    }
+
+    if (recentSymptoms.includes('tired')) {
+        insights.push({
+            title: "Energy Boost",
+            message: "You've been feeling tired. Consider taking short walks or trying some gentle stretching exercises."
+        });
+    }
+
+    return insights.length > 0 ? insights : [{
+        title: "Keep Going",
+        message: "Continue tracking your wellness to discover more personalized insights about your patterns."
+    }];
+}
+
+// Update insights display
+function updateInsights(entries) {
+    const insightsContainer = document.getElementById('insights-container');
+    const insights = generateInsights(entries);
+    
+    insightsContainer.innerHTML = insights.map(insight => `
+        <div class="insight-item">
+            <h3>${insight.title}</h3>
+            <p>${insight.message}</p>
+        </div>
+    `).join('');
+}
+
+// Mindful Moment functionality
+function initializeMindfulMoment() {
+    const modal = document.getElementById('mindful-modal');
+    const startButton = document.getElementById('start-mindful-moment');
+    const closeButton = document.getElementById('close-mindful-modal');
+    const pauseButton = document.getElementById('pause-session');
+    const completeButton = document.getElementById('complete-session');
+    const timer = document.getElementById('session-timer');
+    const breathingCircle = document.querySelector('.breathing-circle');
+    
+    let sessionInterval;
+    let timeLeft = 120; // 2 minutes
+    let isPaused = false;
+    
+    function updateTimer() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
+    function startSession() {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        timeLeft = 120;
+        isPaused = false;
+        updateTimer();
+        
+        sessionInterval = setInterval(() => {
+            if (!isPaused) {
+                timeLeft--;
+                updateTimer();
+                
+                if (timeLeft <= 0) {
+                    completeSession();
+                }
+            }
+        }, 1000);
+    }
+    
+    function pauseSession() {
+        isPaused = !isPaused;
+        if (isPaused) {
+            pauseButton.innerHTML = '<i class="fas fa-play"></i> Resume';
+            breathingCircle.style.animationPlayState = 'paused';
+        } else {
+            pauseButton.innerHTML = '<i class="fas fa-pause"></i> Pause';
+            breathingCircle.style.animationPlayState = 'running';
+        }
+    }
+    
+    function completeSession() {
+        clearInterval(sessionInterval);
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        // Save session completion
+        const sessions = JSON.parse(localStorage.getItem('mindfulSessions') || '[]');
+        sessions.push({
+            date: new Date().toISOString(),
+            duration: 120 - timeLeft
+        });
+        localStorage.setItem('mindfulSessions', JSON.stringify(sessions));
+        
+        // Show completion message
+        alert('Great job! You completed your mindful moment session.');
+    }
+    
+    function closeModal() {
+        clearInterval(sessionInterval);
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        isPaused = false;
+        pauseButton.innerHTML = '<i class="fas fa-pause"></i> Pause';
+        breathingCircle.style.animationPlayState = 'running';
+    }
+    
+    // Event listeners
+    startButton.addEventListener('click', startSession);
+    closeButton.addEventListener('click', closeModal);
+    pauseButton.addEventListener('click', pauseSession);
+    completeButton.addEventListener('click', completeSession);
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     // Set today's date as default
@@ -155,6 +355,15 @@ document.addEventListener('DOMContentLoaded', () => {
             updateChart(entries);
         });
     });
+
+    // Initialize mindful moment
+    initializeMindfulMoment();
+    
+    // Add refresh insights button handler
+    document.getElementById('refresh-insights').addEventListener('click', () => {
+        const entries = JSON.parse(localStorage.getItem('wellnessEntries') || '[]');
+        updateInsights(entries);
+    });
 });
 
 // Handle form submission
@@ -190,6 +399,7 @@ function loadEntries() {
     updateMoodCalendar(entries);
     updateStats(entries);
     updateGoalsProgress(entries);
+    updateInsights(entries);
 }
 
 // Display entries in the history section
