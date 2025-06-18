@@ -79,6 +79,31 @@ const communityPosts = [
     }
 ];
 
+// Initialize goals
+const defaultGoals = [
+    {
+        id: 'water',
+        title: 'Daily Water Intake',
+        target: 8,
+        unit: 'cups',
+        icon: 'fa-tint'
+    },
+    {
+        id: 'sleep',
+        title: 'Sleep Duration',
+        target: 8,
+        unit: 'hours',
+        icon: 'fa-moon'
+    },
+    {
+        id: 'mood',
+        title: 'Positive Mood Days',
+        target: 5,
+        unit: 'days',
+        icon: 'fa-face-smile'
+    }
+];
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     // Set today's date as default
@@ -120,6 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize educational content
     initializeEducationalContent();
+
+    // Add chart period button handlers
+    document.querySelectorAll('.chart-period').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.chart-period').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            const entries = JSON.parse(localStorage.getItem('wellnessEntries') || '[]');
+            updateChart(entries);
+        });
+    });
 });
 
 // Handle form submission
@@ -152,6 +187,9 @@ function loadEntries() {
     const entries = JSON.parse(localStorage.getItem('wellnessEntries') || '[]');
     displayEntries(entries);
     updateChart(entries);
+    updateMoodCalendar(entries);
+    updateStats(entries);
+    updateGoalsProgress(entries);
 }
 
 // Display entries in the history section
@@ -269,11 +307,14 @@ function updateChart(entries) {
         ctx.fillText('No data to display yet', ctx.canvas.width / 2, ctx.canvas.height / 2);
         return;
     }
+
+    const period = document.querySelector('.chart-period.active').dataset.period;
+    const filteredEntries = filterEntriesByPeriod(entries, period);
     
-    const labels = entries.map(entry => formatDate(entry.date));
-    const moodData = entries.map(entry => entry.mood);
-    const waterData = entries.map(entry => entry.water);
-    const sleepData = entries.map(entry => entry.sleep);
+    const labels = filteredEntries.map(entry => formatDate(entry.date));
+    const moodData = filteredEntries.map(entry => entry.mood);
+    const waterData = filteredEntries.map(entry => entry.water);
+    const sleepData = filteredEntries.map(entry => entry.sleep);
     
     window.progressChart = new Chart(ctx, {
         type: 'line',
@@ -318,6 +359,116 @@ function updateChart(entries) {
             }
         }
     });
+}
+
+// Filter entries by period
+function filterEntriesByPeriod(entries, period) {
+    const now = new Date();
+    const startDate = new Date();
+    
+    switch(period) {
+        case 'week':
+            startDate.setDate(now.getDate() - 7);
+            break;
+        case 'month':
+            startDate.setMonth(now.getMonth() - 1);
+            break;
+        case 'year':
+            startDate.setFullYear(now.getFullYear() - 1);
+            break;
+    }
+    
+    return entries.filter(entry => new Date(entry.date) >= startDate);
+}
+
+// Update mood calendar
+function updateMoodCalendar(entries) {
+    const calendar = document.getElementById('mood-calendar');
+    calendar.innerHTML = '';
+    
+    // Create calendar grid
+    const today = new Date();
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - 365);
+    
+    // Create entries map for quick lookup
+    const entriesMap = entries.reduce((acc, entry) => {
+        acc[entry.date] = entry;
+        return acc;
+    }, {});
+    
+    // Generate calendar days
+    for (let i = 0; i < 365; i++) {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + i);
+        const dateString = date.toISOString().split('T')[0];
+        const entry = entriesMap[dateString];
+        
+        const dayElement = document.createElement('div');
+        dayElement.className = 'calendar-day';
+        if (entry) {
+            dayElement.classList.add(`mood-${entry.mood}`);
+        }
+        calendar.appendChild(dayElement);
+    }
+}
+
+// Update stats
+function updateStats(entries) {
+    if (entries.length === 0) return;
+    
+    // Calculate averages
+    const waterAverage = entries.reduce((sum, entry) => sum + Number(entry.water), 0) / entries.length;
+    const sleepAverage = entries.reduce((sum, entry) => sum + Number(entry.sleep), 0) / entries.length;
+    const moodAverage = entries.reduce((sum, entry) => sum + Number(entry.mood), 0) / entries.length;
+    
+    // Update DOM
+    document.getElementById('water-average').textContent = waterAverage.toFixed(1);
+    document.getElementById('sleep-average').textContent = sleepAverage.toFixed(1);
+    document.getElementById('mood-average').textContent = moodAverage.toFixed(1);
+}
+
+// Update goals progress
+function updateGoalsProgress(entries) {
+    const goalsContainer = document.getElementById('goals-container');
+    goalsContainer.innerHTML = '';
+    
+    defaultGoals.forEach(goal => {
+        const progress = calculateGoalProgress(entries, goal);
+        const goalElement = document.createElement('div');
+        goalElement.className = 'goal-item';
+        goalElement.innerHTML = `
+            <i class="fas ${goal.icon}"></i>
+            <div class="goal-info">
+                <h3>${goal.title}</h3>
+                <p>${progress.current} / ${goal.target} ${goal.unit}</p>
+            </div>
+            <div class="goal-progress">
+                <div class="goal-progress-bar" style="width: ${(progress.current / goal.target) * 100}%"></div>
+            </div>
+        `;
+        goalsContainer.appendChild(goalElement);
+    });
+}
+
+// Calculate goal progress
+function calculateGoalProgress(entries, goal) {
+    switch(goal.id) {
+        case 'water':
+            return {
+                current: Math.round(entries.reduce((sum, entry) => sum + Number(entry.water), 0) / entries.length)
+            };
+        case 'sleep':
+            return {
+                current: Math.round(entries.reduce((sum, entry) => sum + Number(entry.sleep), 0) / entries.length)
+            };
+        case 'mood':
+            return {
+                current: entries.filter(entry => Number(entry.mood) >= 4).length
+            };
+        default:
+            return { current: 0 };
+    }
 }
 
 // Display a random wellness tip

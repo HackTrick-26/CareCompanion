@@ -142,12 +142,71 @@
             </section>
 
             <section id="progress" class="tab-content">
-                <div class="card">
-                    <h2>Your Progress</h2>
-                    <div class="chart-container">
-                        <canvas id="progress-chart"></canvas>
+                <div class="progress-grid">
+                    <div class="card progress-card">
+                        <h2>Mood Calendar</h2>
+                        <div class="contribution-calendar" id="mood-calendar">
+                            <!-- Calendar will be populated by JavaScript -->
+                        </div>
+                        <div class="calendar-legend">
+                            <span class="legend-item"><span class="color-box mood-1"></span>Very Low</span>
+                            <span class="legend-item"><span class="color-box mood-2"></span>Low</span>
+                            <span class="legend-item"><span class="color-box mood-3"></span>Neutral</span>
+                            <span class="legend-item"><span class="color-box mood-4"></span>Good</span>
+                            <span class="legend-item"><span class="color-box mood-5"></span>Great</span>
+                        </div>
+                    </div>
+
+                    <div class="card progress-card">
+                        <h2>Weekly Overview</h2>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <i class="fas fa-tint"></i>
+                                <div class="stat-info">
+                                    <h3>Water Intake</h3>
+                                    <p class="stat-value" id="water-average">0</p>
+                                    <p class="stat-label">cups per day</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-moon"></i>
+                                <div class="stat-info">
+                                    <h3>Sleep</h3>
+                                    <p class="stat-value" id="sleep-average">0</p>
+                                    <p class="stat-label">hours per night</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <i class="fas fa-face-smile"></i>
+                                <div class="stat-info">
+                                    <h3>Average Mood</h3>
+                                    <p class="stat-value" id="mood-average">0</p>
+                                    <p class="stat-label">out of 5</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card progress-card">
+                        <h2>Trend Analysis</h2>
+                        <div class="chart-container">
+                            <canvas id="progress-chart"></canvas>
+                        </div>
+                        <div class="chart-controls">
+                            <button class="chart-period active" data-period="week">Week</button>
+                            <button class="chart-period" data-period="month">Month</button>
+                            <button class="chart-period" data-period="year">Year</button>
+                        </div>
+                    </div>
+
+                    <div class="card progress-card">
+                        <h2>Goals Progress</h2>
+                        <div class="goals-list" id="goals-container">
+                            <!-- Goals will be populated by JavaScript -->
+                        </div>
                     </div>
                 </div>
+
                 <div class="card">
                     <h2>Today's Wellness Tip</h2>
                     <p id="tip-content">Loading tip...</p>
