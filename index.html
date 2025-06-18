@@ -16,23 +16,20 @@
                     <h1>CareCompanion</h1>
                     <p class="subtitle">Track your wellness journey</p>
                 </div>
-                <div class="accessibility-controls">
-                    <button id="high-contrast-toggle" class="icon-button" aria-label="Toggle high contrast mode">
-                        <i class="fas fa-adjust"></i>
-                    </button>
-                    <button id="font-size-increase" class="icon-button" aria-label="Increase font size">
-                        <i class="fas fa-text-height"></i>
-                    </button>
-                </div>
             </div>
         </header>
 
         <div class="tabs">
-            <button class="tab-btn active" data-tab="daily-log">Daily Log</button>
-            <button class="tab-btn" data-tab="progress">Progress</button>
-            <button class="tab-btn" data-tab="entries">Entries</button>
-            <button class="tab-btn" data-tab="learn">Learn</button>
-            <button class="tab-btn" data-tab="community">Community</button>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="tabs-container" id="tabs-container">
+                <button class="tab-btn active" data-tab="daily-log">Daily Log</button>
+                <button class="tab-btn" data-tab="progress">Progress</button>
+                <button class="tab-btn" data-tab="entries">Entries</button>
+                <button class="tab-btn" data-tab="learn">Learn</button>
+                <button class="tab-btn" data-tab="community">Community</button>
+            </div>
         </div>
 
         <main>

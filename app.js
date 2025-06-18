@@ -137,15 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initialize accessibility features
-    initializeAccessibility();
-    
     // Initialize community features
     initializeCommunity();
     
     // Initialize educational content
     initializeEducationalContent();
-
+    
+    // Initialize mobile menu
+    initializeMobileMenu();
+    
     // Add chart period button handlers
     document.querySelectorAll('.chart-period').forEach(button => {
         button.addEventListener('click', () => {
@@ -559,42 +559,6 @@ function showAchievementNotification(newAchievements) {
     });
 }
 
-// Accessibility Features
-function initializeAccessibility() {
-    const highContrastToggle = document.getElementById('high-contrast-toggle');
-    const fontSizeIncrease = document.getElementById('font-size-increase');
-    
-    // High contrast mode
-    highContrastToggle.addEventListener('click', () => {
-        document.body.dataset.theme = document.body.dataset.theme === 'high-contrast' ? '' : 'high-contrast';
-        localStorage.setItem('theme', document.body.dataset.theme);
-    });
-    
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        document.body.dataset.theme = savedTheme;
-    }
-    
-    // Font size increase
-    let currentFontSize = 1;
-    fontSizeIncrease.addEventListener('click', () => {
-        currentFontSize = currentFontSize === 1 ? 1.2 : 1;
-        document.body.style.fontSize = `${currentFontSize}rem`;
-    });
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Tab') {
-            document.body.classList.add('keyboard-navigation');
-        }
-    });
-    
-    document.addEventListener('mousedown', () => {
-        document.body.classList.remove('keyboard-navigation');
-    });
-}
-
 // Community Features
 function initializeCommunity() {
     const communityPostsContainer = document.getElementById('community-posts');
@@ -679,4 +643,52 @@ function removeEntry(date, index) {
             loadEntries(); // Reload the entries display
         }
     }
+}
+
+// Mobile Menu Functionality
+function initializeMobileMenu() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const tabsContainer = document.getElementById('tabs-container');
+    
+    // Toggle mobile menu
+    mobileMenuToggle.addEventListener('click', () => {
+        tabsContainer.classList.toggle('mobile-open');
+        
+        // Update hamburger icon
+        const icon = mobileMenuToggle.querySelector('i');
+        if (tabsContainer.classList.contains('mobile-open')) {
+            icon.className = 'fas fa-times';
+        } else {
+            icon.className = 'fas fa-bars';
+        }
+    });
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!mobileMenuToggle.contains(e.target) && !tabsContainer.contains(e.target)) {
+            tabsContainer.classList.remove('mobile-open');
+            const icon = mobileMenuToggle.querySelector('i');
+            icon.className = 'fas fa-bars';
+        }
+    });
+    
+    // Close mobile menu when selecting a tab
+    document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                tabsContainer.classList.remove('mobile-open');
+                const icon = mobileMenuToggle.querySelector('i');
+                icon.className = 'fas fa-bars';
+            }
+        });
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            tabsContainer.classList.remove('mobile-open');
+            const icon = mobileMenuToggle.querySelector('i');
+            icon.className = 'fas fa-bars';
+        }
+    });
 } 
