@@ -799,11 +799,11 @@ textarea:focus {
     }
 }
 
-/* Keyboard Navigation */
+/* Keyboard Navigation 
 :focus {
     outline: 3px solid var(--primary-color);
     outline-offset: 2px;
-}
+}*/
 
 /* Screen Reader Only */
 .sr-only {
